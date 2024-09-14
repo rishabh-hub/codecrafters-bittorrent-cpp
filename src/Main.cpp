@@ -20,7 +20,20 @@ json decode_bencoded_value(const std::string& encoded_value) {
         } else {
             throw std::runtime_error("Invalid encoded value: " + encoded_value);
         }
-    } else {
+    }
+    else if(encoded_value[0]=='i' && encoded_value[encoded_value.size()-1]=='e')
+    {
+        size_t initial_index =encoded_value.find('i');
+        size_t end_index = encoded_value.find('e');
+        if(initial_index!=std::string::npos && end_index!=std::string::npos)
+        {
+            std::string number_string = encoded_value.substr(initial_index+1, end_index-initial_index-1);
+            long long int number =std::stoll(number_string);
+            return json(number);
+        }
+    }
+    
+     else {
         throw std::runtime_error("Unhandled encoded value: " + encoded_value);
     }
 }
